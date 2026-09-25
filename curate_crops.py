@@ -4,7 +4,6 @@ import json
 import random
 from pathlib import Path
 
-# Fix seed for reproducible splits
 random.seed(42)
 
 BASE_DIR = Path(".")
@@ -17,30 +16,40 @@ val_dir.mkdir(parents=True, exist_ok=True)
 
 class_sources = {}
 
-# 1. Filter Tomato and Potato from PlantVillage
+# 1. Tomato & Potato (PlantVillage)
 for p in BASE_DIR.glob("raw_plantvillage/**/Tomato*"):
-    if p.is_dir():
-        class_sources[p.name] = p
-
+    if p.is_dir(): class_sources[p.name] = p
 for p in BASE_DIR.glob("raw_plantvillage/**/Potato*"):
-    if p.is_dir():
-        class_sources[p.name] = p
+    if p.is_dir(): class_sources[p.name] = p
 
-# 2. Filter Rice classes
+# 2. Rice
 for p in BASE_DIR.glob("raw_rice/**"):
     if p.is_dir() and any(f.suffix.lower() in [".jpg", ".jpeg", ".png"] for f in p.iterdir()):
-        clean_name = f"Rice___{p.name.replace(' ', '_')}"
-        class_sources[clean_name] = p
+        class_sources[f"Rice___{p.name.replace(' ', '_')}"] = p
+
+# 3. Sugarcane
+for p in BASE_DIR.glob("raw_sugarcane/**"):
+    if p.is_dir() and any(f.suffix.lower() in [".jpg", ".jpeg", ".png"] for f in p.iterdir()) and p.name != "raw_sugarcane":
+        class_sources[f"Sugarcane___{p.name.replace(' ', '_')}"] = p
+
+# 4. Banana
+for p in BASE_DIR.glob("raw_banana/**"):
+    if p.is_dir() and any(f.suffix.lower() in [".jpg", ".jpeg", ".png"] for f in p.iterdir()) and p.name not in ["raw_banana", "OriginalSet", "AugmentedSet"]:
+        class_sources[f"Banana___{p.name.replace(' ', '_')}"] = p
+
+# 5. Coconut
+for p in BASE_DIR.glob("raw_coconut/**"):
+    if p.is_dir() and any(f.suffix.lower() in [".jpg", ".jpeg", ".png"] for f in p.iterdir()) and p.name != "raw_coconut":
+        class_sources[f"Coconut___{p.name.replace(' ', '_')}"] = p
 
 print(f"\n[+] Total target crop classes detected: {len(class_sources)}")
 for k in sorted(class_sources.keys()):
     print(f"  - {k}")
 
-# 3. Create 80/20 Train/Validation Split using pure Python
-valid_extensions = {".jpg", ".jpeg", ".png"}
+valid_exts = {".jpg", ".jpeg", ".png"}
 
 for class_name, src_folder in class_sources.items():
-    images = [img for img in src_folder.iterdir() if img.suffix.lower() in valid_extensions]
+    images = [img for img in src_folder.iterdir() if img.suffix.lower() in valid_exts]
     if not images:
         continue
 
@@ -54,14 +63,10 @@ for class_name, src_folder in class_sources.items():
     target_train.mkdir(parents=True, exist_ok=True)
     target_val.mkdir(parents=True, exist_ok=True)
 
-    for f in train_files:
-        shutil.copy2(f, target_train / f.name)
-    for f in val_files:
-        shutil.copy2(f, target_val / f.name)
-    
-    print(f"Processed {class_name}: {len(train_files)} train, {len(val_files)} val")
+    for f in train_files: shutil.copy2(f, target_train / f.name)
+    for f in val_files: shutil.copy2(f, target_val / f.name)
 
-# 4. Generate class_mapping.json for Visweshwara
+# Export updated class mapping
 classes_sorted = sorted(list(class_sources.keys()))
 class_to_idx = {name: idx for idx, name in enumerate(classes_sorted)}
 idx_to_class = {idx: name for idx, name in enumerate(classes_sorted)}
@@ -69,5 +74,4 @@ idx_to_class = {idx: name for idx, name in enumerate(classes_sorted)}
 with open(DEST_DIR / "class_mapping.json", "w") as f:
     json.dump({"idx_to_class": idx_to_class, "class_to_idx": class_to_idx}, f, indent=4)
 
-print(f"\n[DONE] Dataset curated at: {DEST_DIR.resolve()}")
-print(f"[DONE] class_mapping.json created successfully.")
+print(f"\n[SUCCESS] Class mapping updated with {len(classes_sorted)} classes.")
