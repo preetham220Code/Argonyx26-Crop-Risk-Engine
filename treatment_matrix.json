@@ -1,47 +1,56 @@
-{
-  "Tomato___Late_blight": {
-    "crop": "Tomato",
-    "disease_en": "Late Blight (Phytophthora infestans)",
-    "disease_kn": "ಟೊಮೆಟೊ ತಡವಾದ ಅಂಗಮಾರಿ ರೋಗ",
-    "disease_hi": "टमाटर पछेती झुलसा",
-    "preventive_organic": "Spray Trichoderma viride @ 5g/L or 5% Neem Seed Kernel Extract (NSKE).",
-    "chemical_curative": "Mancozeb 75% WP @ 2g/L or Metalaxyl-M + Mancozeb @ 2.5g/L.",
-    "irrigation_advice": "Stop overhead sprinkler irrigation immediately. Water strictly at root zone."
+"Ragi___Blast": {
+    "crop": "Ragi",
+    "disease_en": "Finger Millet Blast (Pyricularia grisea)",
+    "disease_kn": "ರಾಗಿ ಬೆಂಕಿ ರೋಗ",
+    "disease_hi": "रागी झुलसा रोग",
+    "preventive_organic": "Spray Pseudomonas fluorescens @ 10g/L or 10% cow urine extract.",
+    "chemical_curative": "Kitazin 48% EC @ 1ml/L or Carbendazim 50% WP @ 1g/L."
   },
-  "Tomato___Early_blight": {
-    "crop": "Tomato",
-    "disease_en": "Early Blight (Alternaria solani)",
-    "disease_kn": "ಟೊಮೆಟೊ ಆರಂಭಿಕ ಅಂಗಮಾರಿ ರೋಗ",
-    "disease_hi": "टमाटर अगेती झुलसा",
-    "preventive_organic": "Prune lower infected leaves; apply Pseudomonas fluorescens @ 10g/L.",
-    "chemical_curative": "Chlorothalonil 75% WP @ 2g/L or Azoxystrobin 23% SC @ 1ml/L.",
-    "irrigation_advice": "Improve spacing for ventilation to reduce leaf wetness duration."
+  "Sugarcane___Red_Rot": {
+    "crop": "Sugarcane",
+    "disease_en": "Red Rot (Colletotrichum falcatum)",
+    "disease_kn": "ಕಬ್ಬಿನ ಕೆಂಪು ಕೊಳೆ ರೋಗ",
+    "disease_hi": "गन्ने की लाल सड़न",
+    "preventive_organic": "Dip setts in Trichoderma viride culture (10g/L); practice crop rotation.",
+    "chemical_curative": "Thiophanate-methyl 70% WP @ 1g/L."
   },
-  "Potato___Late_blight": {
-    "crop": "Potato",
-    "disease_en": "Potato Late Blight (Phytophthora infestans)",
-    "disease_kn": "ಆಲೂಗಡ್ಡೆ ತಡವಾದ ಅಂಗಮಾರಿ ರೋಗ",
-    "disease_hi": "आलू पछेती झुलसा",
-    "preventive_organic": "Spray copper oxychloride (COC) @ 2.5g/L before continuous rain spells.",
-    "chemical_curative": "Cymoxanil 8% + Mancozeb 64% WP @ 1.5g/L.",
-    "irrigation_advice": "Ensure deep ridge drainage to prevent waterlogging around tubers."
+  "Banana___Sigatoka": {
+    "crop": "Banana",
+    "disease_en": "Sigatoka Leaf Spot",
+    "disease_kn": "ಬಾಳೆ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ",
+    "disease_hi": "केले का सिगाटोका रोग",
+    "preventive_organic": "Spray 1% Bordeaux mixture or petroleum-based mineral oils.",
+    "chemical_curative": "Propiconazole 25% EC @ 1ml/L or Propineb 70% WP @ 2g/L."
   },
-  "Rice___Bacterial_leaf_blight": {
-    "crop": "Rice",
-    "disease_en": "Bacterial Leaf Blight (Xanthomonas oryzae)",
-    "disease_kn": "ಭತ್ತದ ದುಂಡಾಣು ಎಲೆ ಕರಕಲು ರೋಗ",
-    "disease_hi": "धान का जीवाणु पत्ती झुलसा",
-    "preventive_organic": "Spray fresh cow dung slurry extract (20%) or neem cake aqueous extract.",
-    "chemical_curative": "Streptocycline @ 0.1g/L combined with Copper Oxychloride @ 1g/L.",
-    "irrigation_advice": "Drain excess standing water from paddy fields for 3–4 days."
+  "Coconut___Leaf_Spot": {
+    "crop": "Coconut",
+    "disease_en": "Grey Leaf Spot / Blight",
+    "disease_kn": "ತೆಂಗಿನ ಎಲೆ ಕರಕಲು ರೋಗ",
+    "disease_hi": "नारियल पत्ती धब्बा",
+    "preventive_organic": "Apply root feeding with neem cake and copper oxychloride paste.",
+    "chemical_curative": "Hexaconazole 5% EC @ 2ml/L water."
   },
-  "Rice___Brown_spot": {
-    "crop": "Rice",
-    "disease_en": "Brown Spot (Bipolaris oryzae)",
-    "disease_kn": "ಭತ್ತದ ಕಂದು ಚುಕ್ಕೆ ರೋಗ",
-    "disease_hi": "धान का भूरा धब्बा रोग",
-    "preventive_organic": "Seed treatment with Trichoderma harzianum @ 10g/kg seed.",
-    "chemical_curative": "Propiconazole 25% EC @ 1ml/L or Edifenphos 50% EC @ 1ml/L.",
-    "irrigation_advice": "Maintain uniform shallow water depth; correct nitrogen-potash soil balance."
+  "Onion___Purple_Blotch": {
+    "crop": "Onion",
+    "disease_en": "Purple Blotch (Alternaria porri)",
+    "disease_kn": "ಈರುಳ್ಳಿ ನೇರಳೆ ಮಚ್ಚೆ ರೋಗ",
+    "disease_hi": "प्याज का बैंगनी धब्बा रोग",
+    "preventive_organic": "Foliar spray with Trichoderma viride @ 5g/L with sticker.",
+    "chemical_curative": "Difenoconazole 25% EC @ 1ml/L or Mancozeb @ 2.5g/L."
+  },
+  "Spices___Black_Pepper_Quick_Wilt": {
+    "crop": "Black Pepper",
+    "disease_en": "Quick Wilt / Foot Rot (Phytophthora capsici)",
+    "disease_kn": "ಕಾಳುಮೆಣಸಿನ ಸೊರಗು ರೋಗ",
+    "disease_hi": "काली मिर्च का द्रुत उकठा",
+    "preventive_organic": "Trichoderma harzianum enriched farmyard manure applied at root basin.",
+    "chemical_curative": "Drench basin with Potassium Phosphonate @ 3ml/L or Metalaxyl @ 2g/L."
+  },
+  "Rubber___Leaf_Fall": {
+    "crop": "Rubber",
+    "disease_en": "Abnormal Leaf Fall (Phytophthora meadii)",
+    "disease_kn": "ರಬ್ಬರ್ ಎಲೆ ಉದುರುವಿಕೆ ರೋಗ",
+    "disease_hi": "रबर पत्ती पतन रोग",
+    "preventive_organic": "Pre-monsoon crown spraying with 1% Bordeaux mixture.",
+    "chemical_curative": "Copper Oxychloride dispersion in oil using micron sprayers."
   }
-}

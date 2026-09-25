@@ -4,9 +4,6 @@ from typing import Dict, Any
 
 class CropRiskEngine:
     def __init__(self, lat: float = 12.9716, lon: float = 77.5946):
-        """
-        Default coordinates set to Bengaluru region (lat=12.9716, lon=77.5946).
-        """
         self.lat = lat
         self.lon = lon
         self.api_url = "https://api.open-meteo.com/v1/forecast"
@@ -20,12 +17,12 @@ class CropRiskEngine:
             "forecast_days": 1,
             "timezone": "auto"
         }
-        response = requests.get(self.api_url, params=params, timeout=10)
-        response.raise_for_status()
-        return response.json()
+        res = requests.get(self.api_url, params=params, timeout=10)
+        res.raise_for_status()
+        return res.json()
 
     def evaluate_risk(self, crop: str) -> Dict[str, Any]:
-        crop = crop.lower()
+        c = crop.lower().strip().replace(" ", "")
         data = self.fetch_weather()
         hourly = data.get("hourly", {})
 
@@ -33,84 +30,84 @@ class CropRiskEngine:
         rhs = hourly.get("relative_humidity_2m", [])[-24:]
         rain_probs = hourly.get("precipitation_probability", [])[-24:]
 
-        if not temps or not rhs:
-            return {"error": "Insufficient weather data received"}
-
         avg_temp = sum(temps) / len(temps)
         avg_rh = sum(rhs) / len(rhs)
-        max_rain_prob = max(rain_probs) if rain_probs else 0
+        max_rain = max(rain_probs) if rain_probs else 0
 
-        # Calculate consecutive high humidity / dew hours (surrogate for Leaf Wetness Duration)
-        consecutive_wet_hours = 0
-        max_consecutive_wet = 0
-        for rh in rhs:
-            if rh >= 88.0:
-                consecutive_wet_hours += 1
-                max_consecutive_wet = max(max_consecutive_wet, consecutive_wet_hours)
-            else:
-                consecutive_wet_hours = 0
+        # Calculate high moisture/dew hours
+        wet_hours = sum(1 for r in rhs if r >= 88.0)
+        risk_score = 15.0
+        threat = "General Foliar Stress"
 
-        risk_score = 0.0
-        primary_threat = "None"
-        alert_level = "LOW"
+        # 1. Tomato & Potato (Late Blight - Wallin Index)
+        if c in ["tomato", "potato"]:
+            threat = "Late Blight (Phytophthora infestans)"
+            hours = sum(1 for t, r in zip(temps, rhs) if 15.0 <= t <= 22.0 and r >= 90.0)
+            risk_score = 65.0 + (hours * 4) if hours >= 8 else (avg_rh * 0.35)
 
-        if crop in ["tomato", "potato"]:
-            # Wallin / Hyre Severity Criteria for Late Blight (Phytophthora infestans)
-            # Optimal: RH >= 90% and Temp between 15°C and 22°C
-            blight_hours = sum(1 for t, r in zip(temps, rhs) if 15.0 <= t <= 22.0 and r >= 90.0)
-            
-            if blight_hours >= 10 or max_consecutive_wet >= 12:
-                risk_score = min(100.0, 60.0 + (blight_hours * 4.0))
-            elif blight_hours >= 5 or max_consecutive_wet >= 8:
-                risk_score = 40.0 + (blight_hours * 3.5)
-            else:
-                risk_score = max(10.0, (avg_rh * 0.3) + (blight_hours * 2.0))
+        # 2. Rice (Rice Blast)
+        elif c == "rice":
+            threat = "Rice Blast (Magnaporthe oryzae)"
+            hours = sum(1 for t, r in zip(temps, rhs) if 24.0 <= t <= 28.0 and r >= 90.0)
+            risk_score = 70.0 + (hours * 4) if hours >= 6 else (avg_rh * 0.3)
 
-            primary_threat = "Late Blight (Phytophthora infestans)"
+        # 3. Ragi / Finger Millet (Ragi Blast - Pyricularia grisea)
+        elif c in ["ragi", "fingermillet"]:
+            threat = "Ragi Blast (Pyricularia grisea)"
+            hours = sum(1 for t, r in zip(temps, rhs) if 22.0 <= t <= 29.0 and r >= 85.0)
+            risk_score = 65.0 + (hours * 3.5) if hours >= 7 else (avg_rh * 0.3)
 
-        elif crop == "rice":
-            # IRRI Criteria for Rice Blast (Magnaporthe oryzae)
-            # Optimal: RH >= 92% and Temp between 24°C and 28°C
-            blast_hours = sum(1 for t, r in zip(temps, rhs) if 24.0 <= t <= 28.0 and r >= 90.0)
+        # 4. Sugarcane (Red Rot & Rust)
+        elif c == "sugarcane":
+            threat = "Red Rot & Rust (Colletotrichum falcatum)"
+            risk_score = 75.0 if (avg_temp >= 28.0 and avg_rh >= 80.0 and max_rain > 50) else (avg_rh * 0.35)
 
-            if blast_hours >= 8 or max_consecutive_wet >= 10:
-                risk_score = min(100.0, 65.0 + (blast_hours * 4.5))
-            elif blast_hours >= 4:
-                risk_score = 45.0 + (blast_hours * 3.5)
-            else:
-                risk_score = max(10.0, (avg_rh * 0.25) + (blast_hours * 2.5))
+        # 5. Banana (Black Sigatoka)
+        elif c == "banana":
+            threat = "Black Sigatoka (Pseudocercospora fijiensis)"
+            hours = sum(1 for t, r in zip(temps, rhs) if 23.0 <= t <= 28.0 and r >= 85.0)
+            risk_score = 70.0 + (hours * 3) if hours >= 8 else (avg_rh * 0.35)
 
-            primary_threat = "Rice Blast (Magnaporthe oryzae)"
+        # 6. Coconut (Bud Rot / Leaf Blight)
+        elif c == "coconut":
+            threat = "Bud Rot (Phytophthora palmivora)"
+            risk_score = 80.0 if (avg_rh >= 85.0 and wet_hours >= 10 and max_rain >= 60) else (avg_rh * 0.3)
 
-        else:
-            return {"error": f"Crop '{crop}' not supported. Choose tomato, potato, or rice."}
+        # 7. Onion (Purple Blotch & Downy Mildew)
+        elif c == "onion":
+            threat = "Purple Blotch (Alternaria porri)"
+            hours = sum(1 for t, r in zip(temps, rhs) if 20.0 <= t <= 25.0 and r >= 85.0)
+            risk_score = 65.0 + (hours * 4) if hours >= 6 else (avg_rh * 0.3)
 
-        risk_score = round(min(100.0, max(0.0, risk_score)), 1)
+        # 8. Black Pepper / Spices (Quick Wilt / Foot Rot)
+        elif c in ["blackpepper", "spices", "pepper"]:
+            threat = "Quick Wilt (Phytophthora capsici)"
+            risk_score = 85.0 if (wet_hours >= 12 and avg_temp >= 22.0 and max_rain >= 50) else (avg_rh * 0.35)
 
-        if risk_score >= 70.0:
-            alert_level = "CRITICAL (HIGH)"
-        elif risk_score >= 40.0:
-            alert_level = "MODERATE"
-        else:
-            alert_level = "LOW"
+        # 9. Rubber (Abnormal Leaf Fall)
+        elif c == "rubber":
+            threat = "Abnormal Leaf Fall (Phytophthora meadii)"
+            risk_score = 80.0 if (avg_rh >= 90.0 and avg_temp <= 26.0 and wet_hours >= 8) else (avg_rh * 0.3)
+
+        risk_score = round(min(100.0, max(10.0, risk_score)), 1)
+        alert = "CRITICAL (HIGH)" if risk_score >= 70 else ("MODERATE" if risk_score >= 40 else "LOW")
 
         return {
             "crop": crop.capitalize(),
             "location": {"latitude": self.lat, "longitude": self.lon},
             "risk_score_percent": risk_score,
-            "alert_level": alert_level,
-            "primary_threat": primary_threat,
+            "alert_level": alert,
+            "primary_threat": threat,
             "metrics": {
                 "avg_temperature_c": round(avg_temp, 1),
                 "avg_relative_humidity": round(avg_rh, 1),
-                "max_rain_probability": max_rain_prob,
-                "consecutive_wet_hours": max_consecutive_wet
+                "max_rain_probability": max_rain,
+                "wet_hours_last_24h": wet_hours
             }
         }
 
 if __name__ == "__main__":
-    # Test execution for Tomato and Rice
-    engine = CropRiskEngine(lat=12.9716, lon=77.5946)
-    for c in ["tomato", "rice"]:
-        report = engine.evaluate_risk(c)
-        print(json.dumps(report, indent=4))
+    engine = CropRiskEngine()
+    for crop_name in ["tomato", "rice", "ragi", "sugarcane", "banana", "coconut", "onion", "black pepper", "rubber"]:
+        res = engine.evaluate_risk(crop_name)
+        print(f"[{res['alert_level']}] {res['crop']}: {res['risk_score_percent']}% -> Threat: {res['primary_threat']}")
