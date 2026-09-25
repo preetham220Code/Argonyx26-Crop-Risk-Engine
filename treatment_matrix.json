@@ -1,0 +1,47 @@
+{
+  "Tomato___Late_blight": {
+    "crop": "Tomato",
+    "disease_en": "Late Blight (Phytophthora infestans)",
+    "disease_kn": "ಟೊಮೆಟೊ ತಡವಾದ ಅಂಗಮಾರಿ ರೋಗ",
+    "disease_hi": "टमाटर पछेती झुलसा",
+    "preventive_organic": "Spray Trichoderma viride @ 5g/L or 5% Neem Seed Kernel Extract (NSKE).",
+    "chemical_curative": "Mancozeb 75% WP @ 2g/L or Metalaxyl-M + Mancozeb @ 2.5g/L.",
+    "irrigation_advice": "Stop overhead sprinkler irrigation immediately. Water strictly at root zone."
+  },
+  "Tomato___Early_blight": {
+    "crop": "Tomato",
+    "disease_en": "Early Blight (Alternaria solani)",
+    "disease_kn": "ಟೊಮೆಟೊ ಆರಂಭಿಕ ಅಂಗಮಾರಿ ರೋಗ",
+    "disease_hi": "टमाटर अगेती झुलसा",
+    "preventive_organic": "Prune lower infected leaves; apply Pseudomonas fluorescens @ 10g/L.",
+    "chemical_curative": "Chlorothalonil 75% WP @ 2g/L or Azoxystrobin 23% SC @ 1ml/L.",
+    "irrigation_advice": "Improve spacing for ventilation to reduce leaf wetness duration."
+  },
+  "Potato___Late_blight": {
+    "crop": "Potato",
+    "disease_en": "Potato Late Blight (Phytophthora infestans)",
+    "disease_kn": "ಆಲೂಗಡ್ಡೆ ತಡವಾದ ಅಂಗಮಾರಿ ರೋಗ",
+    "disease_hi": "आलू पछेती झुलसा",
+    "preventive_organic": "Spray copper oxychloride (COC) @ 2.5g/L before continuous rain spells.",
+    "chemical_curative": "Cymoxanil 8% + Mancozeb 64% WP @ 1.5g/L.",
+    "irrigation_advice": "Ensure deep ridge drainage to prevent waterlogging around tubers."
+  },
+  "Rice___Bacterial_leaf_blight": {
+    "crop": "Rice",
+    "disease_en": "Bacterial Leaf Blight (Xanthomonas oryzae)",
+    "disease_kn": "ಭತ್ತದ ದುಂಡಾಣು ಎಲೆ ಕರಕಲು ರೋಗ",
+    "disease_hi": "धान का जीवाणु पत्ती झुलसा",
+    "preventive_organic": "Spray fresh cow dung slurry extract (20%) or neem cake aqueous extract.",
+    "chemical_curative": "Streptocycline @ 0.1g/L combined with Copper Oxychloride @ 1g/L.",
+    "irrigation_advice": "Drain excess standing water from paddy fields for 3–4 days."
+  },
+  "Rice___Brown_spot": {
+    "crop": "Rice",
+    "disease_en": "Brown Spot (Bipolaris oryzae)",
+    "disease_kn": "ಭತ್ತದ ಕಂದು ಚುಕ್ಕೆ ರೋಗ",
+    "disease_hi": "धान का भूरा धब्बा रोग",
+    "preventive_organic": "Seed treatment with Trichoderma harzianum @ 10g/kg seed.",
+    "chemical_curative": "Propiconazole 25% EC @ 1ml/L or Edifenphos 50% EC @ 1ml/L.",
+    "irrigation_advice": "Maintain uniform shallow water depth; correct nitrogen-potash soil balance."
+  }
+}
