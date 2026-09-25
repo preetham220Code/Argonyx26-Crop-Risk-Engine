@@ -23,3 +23,20 @@ env/
 .kaggle/
 kaggle.json
 access_token
+
+# Ignore raw downloads and zip files
+*.zip
+raw_*/
+
+# Ignore extracted image datasets
+curated_dataset/train/
+curated_dataset/val/
+
+# Keep the class mapping and configs
+!curated_dataset/class_mapping.json
+
+# Python cache & tokens
+__pycache__/
+*.py[cod]
+.kaggle/
+access_token
